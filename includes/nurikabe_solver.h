@@ -8,5 +8,7 @@
 # define BUFFER_SIZE 1024
 
 char	*get_file_content(char *file_name);
+char	**split_lines(char *str);
+char	**free_lines(char **strs);
 
 #endif

@@ -22,7 +22,9 @@ int	main(void)
 	islands = get_islands(lines);
 	print_islands(islands);
 	grid = get_empty_grid(5);
+	initialise_grid(grid, islands);
 	print_grid(grid);
+	printf("%d\n", grid[0][0]);
 	free_grid(grid);
 	free(islands);
 	free_lines(lines);

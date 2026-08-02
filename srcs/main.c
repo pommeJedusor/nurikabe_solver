@@ -24,7 +24,9 @@ int	main(void)
 	grid = get_empty_grid(5);
 	initialise_grid(grid, islands);
 	print_grid(grid);
-	printf("%d\n", grid[0][0]);
+	full_island_borders_rule(grid, islands);
+	print_grid(grid);
+	printf("%d\n", grid[1][1]);
 	free_grid(grid);
 	free(islands);
 	free_lines(lines);

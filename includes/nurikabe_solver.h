@@ -33,6 +33,10 @@ int			**free_grid(int **grid);
 int			**get_empty_grid(int size);
 int			**clone_grid(int **grid);
 void		print_grid(int **grid);
+
 void		initialise_grid(int **grid, t_island *islands);
+int			get_islands_length(t_island *array);
+
+void		full_island_borders_rule(int **grid, t_island *islands);
 
 #endif

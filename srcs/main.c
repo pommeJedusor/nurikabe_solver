@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "nurikabe_solver.h"
 
 int	main(void)

@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include "nurikabe_solver.h"
 
 int	count_lines(char *str)
 {

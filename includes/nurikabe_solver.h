@@ -22,16 +22,16 @@ typedef struct s_island
 	t_pos	pos;
 }	t_island;
 
-char	*get_file_content(char *file_name);
-char	**split_lines(char *str);
-char	**free_lines(char **strs);
+char		*get_file_content(char *file_name);
+char		**split_lines(char *str);
+char		**free_lines(char **strs);
 
 t_island	*get_islands(char **lines);
 void		print_islands(t_island *islands);
 
-int		**free_grid(int **grid);
-int		**get_empty_grid(int size);
-int		**clone_grid(int **grid);
-void	print_grid(int **grid);
+int			**free_grid(int **grid);
+int			**get_empty_grid(int size);
+int			**clone_grid(int **grid);
+void		print_grid(int **grid);
 
 #endif

@@ -7,7 +7,7 @@ int	main(void)
 	t_island	*islands;
 	int			**grid;
 
-	file_content = get_file_content("maps/map1");
+	file_content = get_file_content("maps/map3");
 	if (file_content == 0)
 		return (1);
 	lines = split_lines(file_content);
@@ -19,14 +19,23 @@ int	main(void)
 	printf("%s\n", lines[2]);
 	printf("%s\n", lines[3]);
 	printf("%s\n", lines[4]);
+
 	islands = get_islands(lines);
 	print_islands(islands);
+
 	grid = get_empty_grid(5);
 	initialise_grid(grid, islands);
 	print_grid(grid);
+	printf("\n");
+
 	full_island_borders_rule(grid, islands);
 	print_grid(grid);
-	printf("%d\n", grid[1][1]);
+	printf("\n");
+
+	common_border_rule(grid, islands);
+	print_grid(grid);
+	printf("\n");
+
 	free_grid(grid);
 	free(islands);
 	free_lines(lines);

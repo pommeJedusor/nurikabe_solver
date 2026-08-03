@@ -89,6 +89,8 @@ void	print_grid(int **grid)
 		while (grid[y][x] != -1)
 		{
 			digit = grid[y][x] + '0';
+			if (count_bits(grid[y][x]) == 1)
+				digit = get_trailing_zeros(grid[y][x]) + '0';
 			write(1, &digit, 1);
 			x++;
 		}

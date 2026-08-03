@@ -38,6 +38,7 @@ void		initialise_grid(int **grid, t_island *islands);
 int			get_islands_length(t_island *array);
 
 void		island_borders_rule(int **grid, t_island *islands);
+void		no_water_square_rule(int **grid, t_island *islands);
 
 int			count_bits(int number);
 int			get_trailing_zeros(int number);

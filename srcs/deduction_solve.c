@@ -4,14 +4,12 @@ void	island_borders_rule(int **grid, t_island *islands)
 {
 	int	x;
 	int	y;
-	int	nb_islands;
 	int	islands_id;
 	int	water;
 	int	border;
 
 	y = 0;
-	nb_islands = get_islands_length(islands);
-	water = 1 << nb_islands;
+	water = 1 << get_islands_length(islands);
 	while (grid[y])
 	{
 		x = 0;
@@ -39,5 +37,43 @@ void	island_borders_rule(int **grid, t_island *islands)
 		y++;
 	}
 }
+
+void	no_water_square_rule(int **grid, t_island *islands)
+{
+	int	x;
+	int	y;
+	int	water_counter;
+	int	water;
+
+	water = 1 << get_islands_length(islands);
+	y = 0;
+	while (grid[y] && grid[y + 1])
+	{
+		x = 0;
+		while (grid[y][x] != -1 && grid[y][x + 1] != -1)
+		{
+			water_counter = 0;
+			if (grid[y][x] == water)
+				water_counter++;
+			if (grid[y + 1][x] == water)
+				water_counter++;
+			if (grid[y][x + 1] == water)
+				water_counter++;
+			if (grid[y + 1][x + 1] == water)
+				water_counter++;
+			if (water_counter == 3)
+			{
+				grid[y][x] = water;
+				grid[y + 1][x] = water;
+				grid[y][x + 1] = water;
+				grid[y + 1][x + 1] = water;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
 // checks for all the squares one island can go to using dikjstra
-// if on a 2x2 three of the squares are alerady water then the last one can't be
+// if number of available square for an island is equal to target_size - current_size
+// link water/islands

@@ -74,6 +74,44 @@ void	no_water_square_rule(int **grid)
 	}
 }
 
+int	get_grid_hash(int **grid)
+{
+	int	sum;
+	int	x;
+	int	y;
+
+	sum = 0;
+	y = 0;
+	while (grid[y])
+	{
+		x = 0;
+		while (grid[y][x] != -1)
+		{
+			sum += count_bits(grid[y][x]);
+			x++;
+		}
+		y++;
+	}
+	return (sum);
+}
+
+void	deduction_solve(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
+{
+	int	prev_hash;
+	int	hash;
+
+	prev_hash = -1;
+	hash = get_grid_hash(grid);
+	while (prev_hash != hash)
+	{
+		island_borders_rule(grid, islands);
+		no_water_square_rule(grid);
+		use_bfs_to_limit_islands(grid, islands, cache_grid, dequeue);
+		prev_hash = hash;
+		hash = get_grid_hash(grid);
+	}
+}
+
 // checks for all the squares one island can go to using dikjstra
 // if number of available square for an island is equal to target_size - current_size
 // link water/islands

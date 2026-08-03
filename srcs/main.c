@@ -11,7 +11,7 @@ int	main(int argc, char **argv)
 	int			i;
 	t_dequeue	dequeue;
 
-	file_name = "maps/map1";
+	file_name = "maps/map3";
 	if (argc == 2)
 		file_name = argv[1];
 	file_content = get_file_content(file_name);
@@ -37,21 +37,7 @@ int	main(int argc, char **argv)
 	print_grid(grid);
 	printf("\n");
 
-	island_borders_rule(grid, islands);
-	print_grid(grid);
-	printf("\n");
-
-	no_water_square_rule(grid);
-	print_grid(grid);
-	printf("\n");
-
-	use_bfs_to_limit_islands(grid, islands, cache_grid, &dequeue);
-	no_water_square_rule(grid);
-	print_islands(islands);
-	print_grid(grid);
-	printf("\n");
-	use_bfs_to_limit_islands(grid, islands, cache_grid, &dequeue);
-	island_borders_rule(grid, islands);
+	deduction_solve(grid, islands, cache_grid, &dequeue);
 	print_islands(islands);
 	print_grid(grid);
 	printf("\n");

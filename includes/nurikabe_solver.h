@@ -7,12 +7,14 @@
 # include <stdio.h>
 
 # define BUFFER_SIZE 1024
+# define DEQUEUE_SIZE 1024
 # define WATER 1
 
 typedef struct s_pos
 {
 	int	x;
 	int	y;
+	int	cost;
 }	t_pos;
 
 typedef struct s_island
@@ -22,6 +24,13 @@ typedef struct s_island
 	int		target_size;
 	t_pos	pos;
 }	t_island;
+
+typedef struct s_dequeue
+{
+	int		front_i;
+	int		back_i;
+	t_pos	queue[DEQUEUE_SIZE];
+}	t_dequeue;
 
 char		*get_file_content(char *file_name);
 char		**split_lines(char *str);
@@ -43,5 +52,11 @@ void		no_water_square_rule(int **grid);
 
 int			count_bits(int number);
 int			get_trailing_zeros(int number);
+
+void		initialise_dequeue(t_dequeue *dequeue);
+int			is_empty(t_dequeue dequeue);
+int			is_full(t_dequeue dequeue);
+t_pos		pop_front(t_dequeue *dequeue);
+int			push_back(t_dequeue *dequeue, t_pos pos);
 
 #endif

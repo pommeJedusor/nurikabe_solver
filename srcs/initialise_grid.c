@@ -47,7 +47,7 @@ void	initialise_grid(int **grid, t_island *islands)
 	i = 0;
 	while (islands[i].id != -1)
 	{
-		grid[islands[i].pos.y][islands[i].pos.x] = 1 << islands[i].id;
+		grid[islands[i].pos.y][islands[i].pos.x] = 0b10 << islands[i].id;
 		i++;
 	}
 }

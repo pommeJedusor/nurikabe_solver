@@ -7,6 +7,7 @@
 # include <stdio.h>
 
 # define BUFFER_SIZE 1024
+# define WATER 1
 
 typedef struct s_pos
 {
@@ -38,7 +39,7 @@ void		initialise_grid(int **grid, t_island *islands);
 int			get_islands_length(t_island *array);
 
 void		island_borders_rule(int **grid, t_island *islands);
-void		no_water_square_rule(int **grid, t_island *islands);
+void		no_water_square_rule(int **grid);
 
 int			count_bits(int number);
 int			get_trailing_zeros(int number);

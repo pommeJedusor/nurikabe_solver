@@ -38,7 +38,7 @@ int	main(int argc, char **argv)
 	print_grid(grid);
 	printf("\n");
 
-	no_water_square_rule(grid, islands);
+	no_water_square_rule(grid);
 	print_grid(grid);
 	printf("\n");
 

@@ -96,3 +96,25 @@ void	print_grid(int **grid)
 		y++;
 	}
 }
+
+void	print_solution(int **grid)
+{
+	int		x;
+	int		y;
+
+	y = 0;
+	while (grid[y])
+	{
+		x = 0;
+		while (grid[y][x] != -1)
+		{
+			if (grid[y][x] == WATER)
+				printf("_");
+			else
+				printf("%d", get_trailing_zeros(grid[y][x]));
+			x++;
+		}
+		printf("\n");
+		y++;
+	}
+}

@@ -38,11 +38,13 @@ char		**free_lines(char **strs);
 
 t_island	*get_islands(char **lines);
 void		print_islands(t_island *islands);
+int			get_full_bitmap_for_islands(int nb_islands);
 
 int			**free_grid(int **grid);
 int			**get_empty_grid(int size);
 int			**clone_grid(int **grid);
 void		print_grid(int **grid);
+void		print_solution(int **grid);
 
 void		initialise_grid(int **grid, t_island *islands);
 int			get_islands_length(t_island *array);
@@ -54,9 +56,13 @@ int			count_bits(int number);
 int			get_trailing_zeros(int number);
 
 void		initialise_dequeue(t_dequeue *dequeue);
-int			is_empty(t_dequeue dequeue);
-int			is_full(t_dequeue dequeue);
+int			is_empty(t_dequeue *dequeue);
+int			is_full(t_dequeue *dequeue);
 t_pos		pop_front(t_dequeue *dequeue);
 int			push_back(t_dequeue *dequeue, t_pos pos);
+
+void		bfs(int **grid, t_island island, int **cache_grid, t_dequeue *dequeue);
+void		print_cache_grid(int **grid, int **cache_grid);
+void		use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue);
 
 #endif

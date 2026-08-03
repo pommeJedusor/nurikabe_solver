@@ -59,10 +59,14 @@ void	no_water_square_rule(int **grid)
 				water_counter++;
 			if (water_counter == 3)
 			{
-				grid[y][x] = WATER;
-				grid[y + 1][x] = WATER;
-				grid[y][x + 1] = WATER;
-				grid[y + 1][x + 1] = WATER;
+				if (grid[y][x] != WATER && (grid[y][x] & WATER))
+					grid[y][x] ^= WATER;
+				if (grid[y + 1][x] != WATER && (grid[y + 1][x] & WATER))
+					grid[y + 1][x] ^= WATER;
+				if (grid[y][x + 1] != WATER && (grid[y][x + 1] & WATER))
+					grid[y][x + 1] ^= WATER;
+				if (grid[y + 1][x + 1] != WATER && (grid[y + 1][x + 1] & WATER))
+					grid[y + 1][x + 1] ^= WATER;
 			}
 			x++;
 		}

@@ -28,11 +28,7 @@ int	main(void)
 	print_grid(grid);
 	printf("\n");
 
-	full_island_borders_rule(grid, islands);
-	print_grid(grid);
-	printf("\n");
-
-	common_border_rule(grid, islands);
+	island_borders_rule(grid, islands);
 	print_grid(grid);
 	printf("\n");
 

@@ -61,18 +61,20 @@ void	fill_island(int **grid, t_island island, int **cache_grid)
 	}
 }
 
-void	use_bfs_to_limit_island(int **grid, t_island island, int **cache_grid, t_dequeue *dequeue)
+void	use_bfs_to_limit_island(int **grid, t_island *island, int **cache_grid, t_dequeue *dequeue)
 {
 	int	x;
 	int	y;
 	int	island_bitmap;
 	int	islands_bitmap_wihout_island;
-	int	counter;
+	int	island_square_count;
+	int	island_size;
 
-	island_bitmap = grid[island.pos.y][island.pos.x];
+	island_bitmap = grid[island->pos.y][island->pos.x];
 	islands_bitmap_wihout_island = 0b11111111111111111111111111111111 ^ island_bitmap;
-	bfs(grid, island, cache_grid, dequeue);
-	counter = 0;
+	bfs(grid, *island, cache_grid, dequeue);
+	island_square_count = 0;
+	island_size = 0;
 	y = 0;
 	while (grid[y])
 	{
@@ -82,13 +84,19 @@ void	use_bfs_to_limit_island(int **grid, t_island island, int **cache_grid, t_de
 			if (cache_grid[y][x] == -1)
 				grid[y][x] &= islands_bitmap_wihout_island;
 			else
-				counter++;
+				island_square_count++;
+			if (grid[y][x] == island_bitmap)
+				island_size++;
 			x++;
 		}
 		y++;
 	}
-	if (counter == island.target_size)
-		fill_island(grid, island, cache_grid);
+	island->current_size = island_size;
+	if (island_square_count == island->target_size)
+	{
+		island->current_size = island->target_size;
+		fill_island(grid, *island, cache_grid);
+	}
 }
 
 void	use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
@@ -98,7 +106,7 @@ void	use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, t
 	i = 0;
 	while (islands[i].id != -1)
 	{
-		use_bfs_to_limit_island(grid, islands[i], cache_grid, dequeue);
+		use_bfs_to_limit_island(grid, &islands[i], cache_grid, dequeue);
 		i++;
 	}
 }

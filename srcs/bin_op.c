@@ -2,6 +2,8 @@ int	get_trailing_zeros(int number)
 {
 	int	i;
 
+	if (number == 0)
+		return (-1);
 	i = 0;
 	while ((number & (1 << i)) == 0)
 		i++;

@@ -22,13 +22,13 @@ void	island_borders_rule(int **grid, t_island *islands)
 			islands_id = get_trailing_zeros(grid[y][x]) - 1;
 			if (islands[islands_id].current_size == islands[islands_id].target_size)
 				border = WATER;
-			if (y != 0)
+			if (y != 0 && grid[y - 1][x] != grid[y][x])
 				grid[y - 1][x] &= border;
-			if (x != 0)
+			if (x != 0 && grid[y][x - 1] != grid[y][x])
 				grid[y][x - 1] &= border;
-			if (grid[y + 1])
+			if (grid[y + 1] && grid[y + 1][x] != grid[y][x])
 				grid[y + 1][x] &= border;
-			if (grid[y][x + 1] != -1)
+			if (grid[y][x + 1] != -1 && grid[y][x + 1] != grid[y][x])
 				grid[y][x + 1] &= border;
 			x++;
 		}

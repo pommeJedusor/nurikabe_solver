@@ -46,6 +46,13 @@ int	main(int argc, char **argv)
 	printf("\n");
 
 	use_bfs_to_limit_islands(grid, islands, cache_grid, &dequeue);
+	no_water_square_rule(grid);
+	print_islands(islands);
+	print_grid(grid);
+	printf("\n");
+	use_bfs_to_limit_islands(grid, islands, cache_grid, &dequeue);
+	island_borders_rule(grid, islands);
+	print_islands(islands);
 	print_grid(grid);
 	printf("\n");
 

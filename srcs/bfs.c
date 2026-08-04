@@ -103,7 +103,7 @@ void	use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, t
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (islands[i].id != -1)
 	{
 		use_bfs_to_limit_island(grid, &islands[i], cache_grid, dequeue);

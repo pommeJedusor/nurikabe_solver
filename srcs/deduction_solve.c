@@ -19,7 +19,7 @@ void	island_borders_rule(int **grid, t_island *islands)
 				continue ;
 			}
 			border = WATER | grid[y][x];
-			islands_id = get_trailing_zeros(grid[y][x]) - 1;
+			islands_id = get_trailing_zeros(grid[y][x]);
 			if (islands[islands_id].current_size == islands[islands_id].target_size)
 				border = WATER;
 			if (y != 0 && grid[y - 1][x] != grid[y][x])

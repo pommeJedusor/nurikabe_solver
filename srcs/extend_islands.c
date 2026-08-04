@@ -71,12 +71,12 @@ void	extend_islands(int **grid, int **cache_grid, t_dequeue *dequeue, t_island *
 		pos.x = 0;
 		while (grid[pos.y][pos.x] != -1)
 		{
-			if (grid[pos.y][pos.x] == WATER || count_bits(grid[pos.y][pos.x]) != 1)
+			if (count_bits(grid[pos.y][pos.x]) != 1)
 			{
 				pos.x++;
 				continue ;
 			}
-			island_id = get_trailing_zeros(grid[pos.y][pos.x]) - 1;
+			island_id = get_trailing_zeros(grid[pos.y][pos.x]);
 			if (islands[island_id].current_size != islands[island_id].target_size)
 				extend_island(grid, pos, cache_grid, dequeue, &islands[island_id]);
 			pos.x++;

@@ -95,23 +95,42 @@ int	get_grid_hash(int **grid)
 	return (sum);
 }
 
+int	get_islands_hash(t_island *islands)
+{
+	int	sum;
+	int	i;
+
+	sum = 0;
+	i = 0;
+	while (islands[i].id != -1)
+	{
+		sum += islands[i].current_size;
+		i++;
+	}
+	return (sum);
+}
+
 void	deduction_solve(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
 {
-	int	prev_hash;
-	int	hash;
+	int	prev_grid_hash;
+	int	grid_hash;
+	int	prev_islands_hash;
+	int	islands_hash;
 
-	prev_hash = -1;
-	hash = get_grid_hash(grid);
-	while (prev_hash != hash)
+	prev_grid_hash = -1;
+	prev_islands_hash = -1;
+	grid_hash = get_grid_hash(grid);
+	islands_hash = get_islands_hash(islands);
+	while (prev_grid_hash != grid_hash || prev_islands_hash != islands_hash)
 	{
 		island_borders_rule(grid, islands);
 		no_water_square_rule(grid);
 		use_bfs_to_limit_islands(grid, islands, cache_grid, dequeue);
 		islands[0].current_size = count_water(grid);
 		extend_islands(grid, cache_grid, dequeue, islands);
-		prev_hash = hash;
-		hash = get_grid_hash(grid);
+		prev_grid_hash = grid_hash;
+		grid_hash = get_grid_hash(grid);
+		prev_islands_hash = islands_hash;
+		islands_hash = get_islands_hash(islands);
 	}
 }
-
-// extends group as long as the island isn't full and there is only one square it can extend to

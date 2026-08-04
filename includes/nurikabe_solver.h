@@ -68,5 +68,6 @@ void		use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, 
 void		init_cache_grid(int **grid, int **cache_grid);
 
 void		extend_islands(int **grid, int **cache_grid, t_dequeue *dequeue, t_island *islands);
+int			count_water(int **grid);
 
 #endif

@@ -1,5 +1,27 @@
 #include "nurikabe_solver.h"
 
+int	count_water(int **grid)
+{
+	int	x;
+	int	y;
+	int	count;
+
+	count = 0;
+	y = 0;
+	while (grid[y])
+	{
+		x = 0;
+		while (grid[y][x] != -1)
+		{
+			if (grid[y][x] == WATER)
+				count++;
+			x++;
+		}
+		y++;
+	}
+	return (count);
+}
+
 void	extend_island(int **grid, t_pos pos, int **cache_grid, t_dequeue *dequeue, t_island *island)
 {
 	t_pos	cur_pos;

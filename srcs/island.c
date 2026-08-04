@@ -26,7 +26,7 @@ void	print_islands(t_island *islands)
 {
 	int	i;
 
-	i = 1;
+	i = 0;
 	while (islands[i].id != -1)
 	{
 		printf("id: %d, current_size: %d target_size: %d, x: %d, y: %d\n", islands[i].id, islands[i].current_size, islands[i].target_size, islands[i].pos.x, islands[i].pos.y);

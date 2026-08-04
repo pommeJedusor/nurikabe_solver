@@ -107,6 +107,7 @@ void	deduction_solve(int **grid, t_island *islands, int **cache_grid, t_dequeue 
 		island_borders_rule(grid, islands);
 		no_water_square_rule(grid);
 		use_bfs_to_limit_islands(grid, islands, cache_grid, dequeue);
+		islands[0].current_size = count_water(grid);
 		extend_islands(grid, cache_grid, dequeue, islands);
 		prev_hash = hash;
 		hash = get_grid_hash(grid);

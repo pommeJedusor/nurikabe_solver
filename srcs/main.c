@@ -39,7 +39,7 @@ int	main(int argc, char **argv)
 	print_grid(grid);
 	printf("\n");
 
-	print_solution(grid);
+	print_solution(grid, islands);
 	printf("\n");
 
 	free_grid(grid);

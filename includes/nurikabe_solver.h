@@ -44,7 +44,7 @@ int			**free_grid(int **grid);
 int			**get_empty_grid(int size);
 int			**clone_grid(int **grid);
 void		print_grid(int **grid);
-void		print_solution(int **grid);
+void		print_solution(int **grid, t_island *islands);
 
 void		initialise_grid(int **grid, t_island *islands);
 int			get_islands_length(t_island *array);

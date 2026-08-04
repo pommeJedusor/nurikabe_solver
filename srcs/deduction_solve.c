@@ -107,11 +107,10 @@ void	deduction_solve(int **grid, t_island *islands, int **cache_grid, t_dequeue 
 		island_borders_rule(grid, islands);
 		no_water_square_rule(grid);
 		use_bfs_to_limit_islands(grid, islands, cache_grid, dequeue);
+		extend_islands(grid, cache_grid, dequeue, islands);
 		prev_hash = hash;
 		hash = get_grid_hash(grid);
 	}
 }
 
-// checks for all the squares one island can go to using dikjstra
-// if number of available square for an island is equal to target_size - current_size
-// link water/islands
+// extends group as long as the island isn't full and there is only one square it can extend to

@@ -65,5 +65,8 @@ int			push_back(t_dequeue *dequeue, t_pos pos);
 void		bfs(int **grid, t_island island, int **cache_grid, t_dequeue *dequeue);
 void		print_cache_grid(int **grid, int **cache_grid);
 void		use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue);
+void		init_cache_grid(int **grid, int **cache_grid);
+
+void		extend_islands(int **grid, int **cache_grid, t_dequeue *dequeue, t_island *islands);
 
 #endif

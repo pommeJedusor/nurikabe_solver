@@ -29,13 +29,10 @@ int	main(int argc, char **argv)
 	}
 
 	islands = get_islands(lines);
-	print_islands(islands);
 
 	grid = get_empty_grid(i);
 	cache_grid = get_empty_grid(i);
 	initialise_grid(grid, islands);
-	print_grid(grid);
-	printf("\n");
 
 	deduction_solve(grid, islands, cache_grid, &dequeue);
 	print_islands(islands);

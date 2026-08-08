@@ -63,6 +63,7 @@ void	backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue deq
 	t_island	*islands_clone;
 	t_pos		pos;
 	int			i;
+	int			cache_bitmap;
 
 	grid_clone = clone_grid(grid);
 	if (grid_clone == 0)
@@ -95,9 +96,10 @@ void	backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue deq
 	}
 	pos = get_optimal_pos_to_change(grid_clone, islands_clone);
 	i = 0;
+	cache_bitmap = grid_clone[pos.y][pos.x];
 	while (i < 32 && pos.x != -1)
 	{
-		if (grid[pos.y][pos.x] & (1 << i))
+		if (cache_bitmap & (1 << i))
 		{
 			grid_clone[pos.y][pos.x] = 1 << i;
 			backtracking(grid_clone, islands_clone, cache_grid, dequeue);

@@ -145,7 +145,7 @@ void	bfs(int **grid, t_island island, int **cache_grid, t_dequeue *dequeue)
 	while (!is_empty(dequeue))
 	{
 		cur_pos = pop_front(dequeue);
-		if (cur_pos.cost > max_cost || cache_grid[cur_pos.y][cur_pos.x] != -1 || (grid[cur_pos.y][cur_pos.x] & island_bitmap) == 0)
+		if (cur_pos.cost > max_cost || (cache_grid[cur_pos.y][cur_pos.x] <= cur_pos.cost && cache_grid[cur_pos.y][cur_pos.x] != -1) || (grid[cur_pos.y][cur_pos.x] & island_bitmap) == 0)
 			continue ;
 		cache_grid[cur_pos.y][cur_pos.x] = cur_pos.cost;
 		if (cur_pos.y > 0)

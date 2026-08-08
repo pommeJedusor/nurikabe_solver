@@ -111,7 +111,7 @@ void	print_solution(int **grid, t_island *islands)
 			if (grid[y][x] == WATER)
 				printf("~");
 			else if (count_bits(grid[y][x]) == 1)
-				printf("%d", islands[get_trailing_zeros(grid[y][x])].target_size);
+				printf("%c", islands[get_trailing_zeros(grid[y][x])].target_size + '0');
 			else
 				printf("?");
 			x++;

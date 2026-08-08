@@ -88,8 +88,8 @@ void	backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue deq
 	if (is_solved(grid_clone))
 	{
 		print_solution(grid_clone, islands_clone);
-		printf("solution found\n");
-		printf("\n");
+		//printf("solution found\n");
+		//printf("\n");
 		free_clones(grid_clone, islands_clone);
 		return ;
 	}

@@ -24,10 +24,10 @@ int	main(int argc, char **argv)
 	i = 0;
 	while (lines[i])
 	{
-		printf("%s\n", lines[i]);
+		//printf("%s\n", lines[i]);
 		i++;
 	}
-	printf("\n");
+	//printf("\n");
 
 	islands = get_islands(lines);
 

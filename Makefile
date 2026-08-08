@@ -7,7 +7,7 @@ CFLAGS = -Wall -Wextra -Werror
 all: ./$(PROGRAM_NAME)
 
 ./$(PROGRAM_NAME): $(CPATHS)
-	cc $(CFLAGS) -I $(HEADERS) $(CPATHS) -o $(PROGRAM_NAME)
+	cc $(CFLAGS) -I $(HEADERS) $(CPATHS) -o $(PROGRAM_NAME) -O3
 
 debug: $(CPATHS)
 	cc $(CFLAGS) -I $(HEADERS) $(CPATHS) -o $(PROGRAM_NAME) -g

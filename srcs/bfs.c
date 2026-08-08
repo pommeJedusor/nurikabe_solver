@@ -22,6 +22,24 @@ void	print_cache_grid(int **grid, int **cache_grid)
 	}
 }
 
+void	empty_cache_grid(int **grid, int **cache_grid)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (grid[y])
+	{
+		x = 0;
+		while (grid[y][x] != -1)
+		{
+			cache_grid[y][x] = 0;
+			x++;
+		}
+		y++;
+	}
+}
+
 void	init_cache_grid(int **grid, int **cache_grid)
 {
 	int	x;

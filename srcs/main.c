@@ -27,6 +27,7 @@ int	main(int argc, char **argv)
 		printf("%s\n", lines[i]);
 		i++;
 	}
+	printf("\n");
 
 	islands = get_islands(lines);
 
@@ -34,13 +35,14 @@ int	main(int argc, char **argv)
 	cache_grid = get_empty_grid(i);
 	initialise_grid(grid, islands);
 
-	deduction_solve(grid, islands, cache_grid, &dequeue);
-	print_islands(islands);
-	print_grid(grid);
-	printf("\n");
+	backtracking(grid, islands, cache_grid, dequeue);
+	//deduction_solve(grid, islands, cache_grid, &dequeue);
+	//print_islands(islands);
+	//print_grid(grid);
+	//printf("\n");
 
-	print_solution(grid, islands);
-	printf("\n");
+	//print_solution(grid, islands);
+	//printf("\n");
 
 	free_grid(grid);
 	free_grid(cache_grid);

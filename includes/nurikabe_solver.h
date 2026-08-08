@@ -39,6 +39,8 @@ char		**free_lines(char **strs);
 t_island	*get_islands(char **lines);
 void		print_islands(t_island *islands);
 int			get_full_bitmap_for_islands(int nb_islands);
+int			get_islands_length(t_island *array);
+t_island	*clone_islands(t_island *array);
 
 int			**free_grid(int **grid);
 int			**get_empty_grid(int size);
@@ -47,7 +49,6 @@ void		print_grid(int **grid);
 void		print_solution(int **grid, t_island *islands);
 
 void		initialise_grid(int **grid, t_island *islands);
-int			get_islands_length(t_island *array);
 
 void		island_borders_rule(int **grid, t_island *islands);
 void		no_water_square_rule(int **grid);
@@ -66,8 +67,13 @@ void		bfs(int **grid, t_island island, int **cache_grid, t_dequeue *dequeue);
 void		print_cache_grid(int **grid, int **cache_grid);
 void		use_bfs_to_limit_islands(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue);
 void		init_cache_grid(int **grid, int **cache_grid);
+void		empty_cache_grid(int **grid, int **cache_grid);
 
 void		extend_islands(int **grid, int **cache_grid, t_dequeue *dequeue, t_island *islands);
 int			count_water(int **grid);
+
+void		backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue dequeue);
+
+int			is_valid(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue);
 
 #endif

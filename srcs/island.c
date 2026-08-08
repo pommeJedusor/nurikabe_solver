@@ -1,5 +1,33 @@
 #include "nurikabe_solver.h"
 
+int	get_islands_length(t_island *array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i].id != -1)
+		i++;
+	return (i);
+}
+
+t_island	*clone_islands(t_island *array)
+{
+	t_island	*clone;
+	int 		i;
+
+	clone = malloc(sizeof(t_island) * (get_islands_length(array) + 1));
+	if (clone == 0)
+		return (0);
+	i = 0;
+	while (array[i].id != -1)
+	{
+		clone[i] = array[i];
+		i++;
+	}
+	clone[i] = array[i];
+	return (clone);
+}
+
 int	count_islands(char **lines)
 {
 	int	x;

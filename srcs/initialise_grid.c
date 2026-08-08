@@ -1,15 +1,5 @@
 #include <nurikabe_solver.h>
 
-int	get_islands_length(t_island *array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i].id != -1)
-		i++;
-	return (i);
-}
-
 int	get_full_bitmap_for_islands(int nb_islands)
 {
 	int	bitmap;

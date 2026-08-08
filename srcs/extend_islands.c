@@ -77,8 +77,9 @@ void	extend_island(int **grid, t_pos pos, int **cache_grid, t_dequeue *dequeue, 
 	if (potential_extend_nb == 1)
 	{
 		grid[last_pos.y][last_pos.x] = grid[pos.y][pos.x];
-		cache_grid[last_pos.y][last_pos.x] = 0;
 		island->current_size += 1;
+		// reninitialise the cache_grid to avoid bugs
+		init_cache_grid(grid, cache_grid);
 	}
 }
 

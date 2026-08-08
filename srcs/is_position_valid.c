@@ -57,17 +57,19 @@ t_pos	find_first_water(int **grid)
 	return (pos);
 }
 
-int	isolated_island_part(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
+int	isolated_island_part_and_max_size(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
 {
 	t_pos	pos;
 	int		i;
 	int		island_bitmap;
+	int		max_potential_size;
 
 	initialise_dequeue(dequeue);
 	empty_cache_grid(grid, cache_grid);
 	i = 0;
 	while (islands[i].id != -1)
 	{
+		max_potential_size = 0;
 		island_bitmap = 1 << i;
 		if (i == 0)
 			push_back(dequeue, find_first_water(grid));
@@ -80,12 +82,15 @@ int	isolated_island_part(int **grid, t_island *islands, int **cache_grid, t_dequ
 					|| (grid[pos.y][pos.x] & island_bitmap) == 0
 					|| cache_grid[pos.y][pos.x] & island_bitmap)
 				continue ;
+			max_potential_size++;
 			cache_grid[pos.y][pos.x] |= island_bitmap;
 			push_back(dequeue, (t_pos){ pos.x - 1, pos.y, -1 });
 			push_back(dequeue, (t_pos){ pos.x + 1, pos.y, -1 });
 			push_back(dequeue, (t_pos){ pos.x, pos.y - 1, -1 });
 			push_back(dequeue, (t_pos){ pos.x, pos.y + 1, -1 });
 		}
+		if (max_potential_size < islands[i].target_size)
+			return (1);
 		i++;
 	}
 	pos.y = 0;
@@ -109,7 +114,7 @@ int	is_valid(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue
 		return (0);
 	if (are_there_empty_squares(grid))
 		return (0);
-	if (isolated_island_part(grid, islands, cache_grid, dequeue))
+	if (isolated_island_part_and_max_size(grid, islands, cache_grid, dequeue))
 		return (0);
 	//todo add water square check
 	return (1);

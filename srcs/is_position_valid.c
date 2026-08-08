@@ -108,6 +108,26 @@ int	isolated_island_part_and_max_size(int **grid, t_island *islands, int **cache
 	return (0);
 }
 
+int	is_water_square(int **grid)
+{
+	t_pos	pos;
+
+	pos.y = 0;
+	while (grid[pos.y + 1])
+	{
+		pos.x = 0;
+		while (grid[pos.y][pos.x + 1] != -1)
+		{
+			if (grid[pos.y][pos.x] == WATER && grid[pos.y][pos.x + 1] == WATER
+					&& grid[pos.y + 1][pos.x] == WATER && grid[pos.y + 1][pos.x + 1] == WATER)
+				return (1);
+			pos.x += 1;
+		}
+		pos.y += 1;
+	}
+	return (0);
+}
+
 int	is_valid(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
 {
 	if (are_islands_in_place(grid, islands) == 0)
@@ -116,6 +136,7 @@ int	is_valid(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue
 		return (0);
 	if (isolated_island_part_and_max_size(grid, islands, cache_grid, dequeue))
 		return (0);
-	//todo add water square check
+	if (is_water_square(grid))
+		return (0);
 	return (1);
 }

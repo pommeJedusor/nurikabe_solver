@@ -1,35 +1,36 @@
 #include <nurikabe_solver.h>
 
-int	get_full_bitmap_for_islands(int nb_islands)
-{
-	int	bitmap;
-
-	bitmap = 0;
-	while (nb_islands >= 0)
-	{
-		bitmap |= 1 << nb_islands;
-		nb_islands--;
-	}
-	return (bitmap);
-}
-
-void	initialise_grid(int **grid, t_island *islands)
+void	get_full_bitmap_for_islands(int nb_islands, unsigned long long *bitmap)
 {
 	int	i;
-	int	island_bitmap;
-	int	nb_island;
-	int	x;
-	int	y;
+
+	i = 0;
+	while (i < nb_islands)
+	{
+		if (i % 64 == 0)
+			bitmap[i / 64] = 0;
+		bitmap[i / 64] |= 1ULL << (i % 64);
+		i++;
+	}
+}
+
+void	initialise_grid(unsigned long long ***grid, t_island *islands)
+{
+	int					i;
+	int					nb_island;
+	int					x;
+	int					y;
+	unsigned long long	island_bitmap[MAX_BITSET_SIZE];
 
 	nb_island = get_islands_length(islands);
-	island_bitmap = get_full_bitmap_for_islands(nb_island - 1);
+	get_full_bitmap_for_islands(nb_island, island_bitmap);
 	y = 0;
 	while (grid[y])
 	{
 		x = 0;
-		while (grid[y][x] != -1)
+		while (grid[y][x])
 		{
-			grid[y][x] = island_bitmap;
+			copy_bitset(grid[y][x], island_bitmap, get_bitset_size_from_islands(islands));
 			x++;
 		}
 		y++;
@@ -37,7 +38,7 @@ void	initialise_grid(int **grid, t_island *islands)
 	i = 1;
 	while (islands[i].id != -1)
 	{
-		grid[islands[i].pos.y][islands[i].pos.x] = 1 << islands[i].id;
+		grid[islands[i].pos.y][islands[i].pos.x][islands[i].id / 64] = 1ULL << (islands[i].id % 64);
 		i++;
 	}
 }

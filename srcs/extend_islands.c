@@ -1,6 +1,6 @@
 #include "nurikabe_solver.h"
 
-int	count_water(int **grid)
+int	count_water(unsigned long long ***grid, int bitset_size)
 {
 	int	x;
 	int	y;
@@ -11,9 +11,9 @@ int	count_water(int **grid)
 	while (grid[y])
 	{
 		x = 0;
-		while (grid[y][x] != -1)
+		while (grid[y][x])
 		{
-			if (grid[y][x] == WATER)
+			if (cmp_bitsets(grid[y][x], WATER, bitset_size) == 0)
 				count++;
 			x++;
 		}
@@ -22,14 +22,14 @@ int	count_water(int **grid)
 	return (count);
 }
 
-void	extend_island(int **grid, t_pos pos, int **cache_grid, t_dequeue *dequeue, t_island *island)
+void	extend_island(unsigned long long ***grid, t_pos pos, unsigned long long ***cache_grid, t_dequeue *dequeue, t_island *island, int bitset_size)
 {
 	t_pos	cur_pos;
 	t_pos	next_pos;
 	t_pos	last_pos;
 	int		potential_extend_nb;
 
-	if (cache_grid[pos.y][pos.x] != -1)
+	if (cmp_bitsets(cache_grid[pos.y][pos.x], UNINITIALISED_BITSET, bitset_size) != 0)
 		return ;
 	last_pos.x = -1;
 	potential_extend_nb = 0;
@@ -38,17 +38,23 @@ void	extend_island(int **grid, t_pos pos, int **cache_grid, t_dequeue *dequeue, 
 	while (!is_empty(dequeue))
 	{
 		cur_pos = pop_front(dequeue);
-		if (cache_grid[cur_pos.y][cur_pos.x] != -1)
+		if (cmp_bitsets(cache_grid[cur_pos.y][cur_pos.x], UNINITIALISED_BITSET, bitset_size) != 0)
 			continue ;
-		if ((grid[cur_pos.y][cur_pos.x] & grid[pos.y][pos.x]) == 0)
-			continue ;
-		if (grid[cur_pos.y][cur_pos.x] != grid[pos.y][pos.x])
+		copy_bitset(cache_grid[cur_pos.y][cur_pos.x], grid[cur_pos.y][cur_pos.x], bitset_size);
+		bitset_and(cache_grid[cur_pos.y][cur_pos.x], grid[pos.y][pos.x], bitset_size);
+		if (cmp_bitsets(cache_grid[cur_pos.y][cur_pos.x], EMPTY_BITSET, bitset_size) == 0)
 		{
+			copy_bitset(cache_grid[cur_pos.y][cur_pos.x], UNINITIALISED_BITSET, bitset_size);
+			continue ;
+		}
+		if (cmp_bitsets(grid[cur_pos.y][cur_pos.x], grid[pos.y][pos.x], bitset_size) != 0)
+		{
+			copy_bitset(cache_grid[cur_pos.y][cur_pos.x], UNINITIALISED_BITSET, bitset_size);
 			potential_extend_nb++;
 			last_pos = cur_pos;
 			continue ;
 		}
-		cache_grid[cur_pos.y][cur_pos.x] = 0;
+		copy_bitset(cache_grid[cur_pos.y][cur_pos.x], EMPTY_BITSET, bitset_size);
 		if (cur_pos.y > 0)
 		{
 			next_pos = cur_pos;
@@ -67,7 +73,7 @@ void	extend_island(int **grid, t_pos pos, int **cache_grid, t_dequeue *dequeue, 
 			next_pos.y += 1;
 			push_back(dequeue, next_pos);
 		}
-		if (grid[cur_pos.y][cur_pos.x + 1] != -1)
+		if (grid[cur_pos.y][cur_pos.x + 1])
 		{
 			next_pos = cur_pos;
 			next_pos.x += 1;
@@ -76,33 +82,35 @@ void	extend_island(int **grid, t_pos pos, int **cache_grid, t_dequeue *dequeue, 
 	}
 	if (potential_extend_nb == 1)
 	{
-		grid[last_pos.y][last_pos.x] = grid[pos.y][pos.x];
+		copy_bitset(grid[last_pos.y][last_pos.x], grid[pos.y][pos.x], bitset_size);
 		island->current_size += 1;
 		// reninitialise the cache_grid to avoid bugs
-		init_cache_grid(grid, cache_grid);
+		init_cache_grid(grid, cache_grid, bitset_size);
 	}
 }
 
-void	extend_islands(int **grid, int **cache_grid, t_dequeue *dequeue, t_island *islands)
+void	extend_islands(unsigned long long ***grid, unsigned long long ***cache_grid, t_dequeue *dequeue, t_island *islands)
 {
 	t_pos	pos;
 	int		island_id;
+	int		bitset_size;
 
-	init_cache_grid(grid, cache_grid);
+	bitset_size = get_bitset_size_from_islands(islands);
+	init_cache_grid(grid, cache_grid, bitset_size);
 	pos.y = 0;
 	while (grid[pos.y])
 	{
 		pos.x = 0;
-		while (grid[pos.y][pos.x] != -1)
+		while (grid[pos.y][pos.x])
 		{
-			if (count_bits(grid[pos.y][pos.x]) != 1)
+			if (count_bitset_bits(grid[pos.y][pos.x], bitset_size) != 1)
 			{
 				pos.x++;
 				continue ;
 			}
-			island_id = get_trailing_zeros(grid[pos.y][pos.x]);
+			island_id = get_bitset_trailing_zeros(grid[pos.y][pos.x], bitset_size);
 			if (islands[island_id].current_size != islands[island_id].target_size)
-				extend_island(grid, pos, cache_grid, dequeue, &islands[island_id]);
+				extend_island(grid, pos, cache_grid, dequeue, &islands[island_id], bitset_size);
 			pos.x++;
 		}
 		pos.y++;

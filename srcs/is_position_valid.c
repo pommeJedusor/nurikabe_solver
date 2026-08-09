@@ -1,6 +1,6 @@
 #include "nurikabe_solver.h"
 
-int	are_there_empty_squares(int **grid)
+int	are_there_empty_squares(const unsigned long long ***grid, int bitset_size)
 {
 	int	x;
 	int	y;
@@ -9,9 +9,9 @@ int	are_there_empty_squares(int **grid)
 	while (grid[y])
 	{
 		x = 0;
-		while (grid[y][x] != -1)
+		while (grid[y][x])
 		{
-			if (count_bits(grid[y][x]) == 0)
+			if (count_bitset_bits(grid[y][x], bitset_size) == 0)
 				return (1);
 			x++;
 		}
@@ -20,23 +20,26 @@ int	are_there_empty_squares(int **grid)
 	return (0);
 }
 
-int	are_islands_in_place(int **grid, t_island *islands)
+int	are_islands_in_place(const unsigned long long ***grid, t_island *islands)
 {
 	int		i;
 	t_pos	pos;
+	int		bitset_size;
 
+	bitset_size = get_bitset_size_from_islands(islands);
 	i = 1;
 	while (islands[i].id != -1)
 	{
 		pos = islands[i].pos;
-		if (grid[pos.y][pos.x] != 1 << islands[i].id)
+		if (count_bitset_bits(grid[pos.y][pos.x], bitset_size) != 1
+				|| grid[pos.y][pos.x][islands[i].id / 64] != 1ULL << (islands[i].id % 64))
 			return (0);
 		i++;
 	}
 	return (1);
 }
 
-t_pos	find_first_water(int **grid)
+t_pos	find_first_water(const unsigned long long ***grid)
 {
 	t_pos	pos;
 
@@ -44,9 +47,9 @@ t_pos	find_first_water(int **grid)
 	while (grid[pos.y])
 	{
 		pos.x = 0;
-		while (grid[pos.y][pos.x] != -1)
+		while (grid[pos.y][pos.x])
 		{
-			if (grid[pos.y][pos.x] & WATER)
+			if (grid[pos.y][pos.x][0] & 1)
 				return (pos);
 			pos.x += 1;
 		}
@@ -57,20 +60,23 @@ t_pos	find_first_water(int **grid)
 	return (pos);
 }
 
-int	isolated_island_part_and_max_size(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
+int	isolated_island_part_and_max_size(const unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue *dequeue)
 {
-	t_pos	pos;
-	int		i;
-	int		island_bitmap;
-	int		max_potential_size;
+	t_pos				pos;
+	int					i;
+	int					max_potential_size;
+	int					bitset_size;
+	unsigned long long	island_bitmap[MAX_BITSET_SIZE];
 
+	bitset_size = get_bitset_size_from_islands(islands);
 	initialise_dequeue(dequeue);
-	empty_cache_grid(grid, cache_grid);
+	empty_cache_grid(grid, cache_grid, bitset_size);
 	i = 0;
 	while (islands[i].id != -1)
 	{
 		max_potential_size = 0;
-		island_bitmap = 1 << i;
+		copy_bitset(island_bitmap, EMPTY_BITSET, bitset_size);
+		island_bitmap[i / 64] = 1ULL << (i % 64);
 		if (i == 0)
 			push_back(dequeue, find_first_water(grid));
 		else
@@ -78,12 +84,12 @@ int	isolated_island_part_and_max_size(int **grid, t_island *islands, int **cache
 		while (!is_empty(dequeue))
 		{
 			pos = pop_front(dequeue);
-			if (pos.x < 0 || pos.y < 0 || grid[pos.y] == 0 || grid[pos.y][pos.x] == -1
-					|| (grid[pos.y][pos.x] & island_bitmap) == 0
-					|| cache_grid[pos.y][pos.x] & island_bitmap)
+			if (pos.x < 0 || pos.y < 0 || grid[pos.y] == 0 || grid[pos.y][pos.x] == 0
+					|| (grid[pos.y][pos.x][i / 64] & (1ULL << (i % 64))) == 0
+					|| cache_grid[pos.y][pos.x][i / 64] & (1ULL << (i % 64)))
 				continue ;
 			max_potential_size++;
-			cache_grid[pos.y][pos.x] |= island_bitmap;
+			bitset_or(cache_grid[pos.y][pos.x], island_bitmap, bitset_size);
 			push_back(dequeue, (t_pos){ pos.x - 1, pos.y, -1 });
 			push_back(dequeue, (t_pos){ pos.x + 1, pos.y, -1 });
 			push_back(dequeue, (t_pos){ pos.x, pos.y - 1, -1 });
@@ -97,9 +103,9 @@ int	isolated_island_part_and_max_size(int **grid, t_island *islands, int **cache
 	while (grid[pos.y])
 	{
 		pos.x = 0;
-		while (grid[pos.y][pos.x] != -1)
+		while (grid[pos.y][pos.x])
 		{
-			if (cache_grid[pos.y][pos.x] != grid[pos.y][pos.x])
+			if (cmp_bitsets(cache_grid[pos.y][pos.x], grid[pos.y][pos.x], bitset_size) != 0)
 				return (1);
 			pos.x += 1;
 		}
@@ -108,7 +114,7 @@ int	isolated_island_part_and_max_size(int **grid, t_island *islands, int **cache
 	return (0);
 }
 
-int	is_water_square(int **grid)
+int	is_water_square(const unsigned long long ***grid, int bitset_size)
 {
 	t_pos	pos;
 
@@ -116,10 +122,12 @@ int	is_water_square(int **grid)
 	while (grid[pos.y + 1])
 	{
 		pos.x = 0;
-		while (grid[pos.y][pos.x + 1] != -1)
+		while (grid[pos.y][pos.x + 1])
 		{
-			if (grid[pos.y][pos.x] == WATER && grid[pos.y][pos.x + 1] == WATER
-					&& grid[pos.y + 1][pos.x] == WATER && grid[pos.y + 1][pos.x + 1] == WATER)
+			if (cmp_bitsets(grid[pos.y][pos.x], WATER, bitset_size) == 0
+					&& cmp_bitsets(grid[pos.y][pos.x + 1], WATER, bitset_size) == 0
+					&& cmp_bitsets(grid[pos.y + 1][pos.x], WATER, bitset_size) == 0
+					&& cmp_bitsets(grid[pos.y + 1][pos.x + 1], WATER, bitset_size) == 0)
 				return (1);
 			pos.x += 1;
 		}
@@ -128,15 +136,18 @@ int	is_water_square(int **grid)
 	return (0);
 }
 
-int	is_valid(int **grid, t_island *islands, int **cache_grid, t_dequeue *dequeue)
+int	is_valid(const unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue *dequeue)
 {
+	int		bitset_size;
+
+	bitset_size = get_bitset_size_from_islands(islands);
 	if (are_islands_in_place(grid, islands) == 0)
 		return (0);
-	if (are_there_empty_squares(grid))
+	if (are_there_empty_squares(grid, bitset_size))
 		return (0);
 	if (isolated_island_part_and_max_size(grid, islands, cache_grid, dequeue))
 		return (0);
-	if (is_water_square(grid))
+	if (is_water_square(grid, bitset_size))
 		return (0);
 	return (1);
 }

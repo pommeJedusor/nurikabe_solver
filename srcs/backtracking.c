@@ -1,7 +1,7 @@
 #include <limits.h>
 #include "nurikabe_solver.h"
 
-int	is_solved(int **grid)
+int	is_solved(unsigned long long ***grid, int bitset_size)
 {
 	int	x;
 	int	y;
@@ -10,9 +10,9 @@ int	is_solved(int **grid)
 	while (grid[y])
 	{
 		x = 0;
-		while (grid[y][x] != -1)
+		while (grid[y][x])
 		{
-			if (count_bits(grid[y][x]) != 1)
+			if (count_bitset_bits(grid[y][x], bitset_size) != 1)
 				return (0);
 			x++;
 		}
@@ -21,13 +21,15 @@ int	is_solved(int **grid)
 	return (1);
 }
 
-t_pos	get_optimal_pos_to_change(int **grid, t_island *islands)
+t_pos	get_optimal_pos_to_change(unsigned long long ***grid, t_island *islands)
 {
 	t_pos	pos;
 	t_pos	best_pos;
 	int		best_pos_possibilities;
 	int		bit_count;
+	int		bitset_size;
 
+	bitset_size = get_bitset_size_from_islands(islands);
 	(void)islands;
 	best_pos.x = -1;
 	best_pos.y = -1;
@@ -36,9 +38,9 @@ t_pos	get_optimal_pos_to_change(int **grid, t_island *islands)
 	while (grid[pos.y])
 	{
 		pos.x = 0;
-		while (grid[pos.y][pos.x] != -1)
+		while (grid[pos.y][pos.x])
 		{
-			bit_count = count_bits(grid[pos.y][pos.x]);
+			bit_count = count_bitset_bits(grid[pos.y][pos.x], bitset_size);
 			if (bit_count > 1 && bit_count < best_pos_possibilities)
 			{
 				best_pos_possibilities = bit_count;
@@ -51,21 +53,24 @@ t_pos	get_optimal_pos_to_change(int **grid, t_island *islands)
 	return (best_pos);
 }
 
-void	free_clones(int **grid, t_island *islands)
+void	free_clones(unsigned long long ***grid, t_island *islands)
 {
 	free_grid(grid);
 	free(islands);
 }
 
-void	backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue dequeue)
+void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue dequeue)
 {
-	int			**grid_clone;
-	t_island	*islands_clone;
-	t_pos		pos;
-	int			i;
-	int			cache_bitmap;
+	unsigned long long	***grid_clone;
+	unsigned long long	cache_bitmap[MAX_BITSET_SIZE];
+	t_island			*islands_clone;
+	t_pos				pos;
+	int					i;
+	int					j;
+	int					bitset_size;
 
-	grid_clone = clone_grid(grid);
+	bitset_size = get_bitset_size_from_islands(islands);
+	grid_clone = clone_grid(grid, bitset_size);
 	if (grid_clone == 0)
 		return ;
 	islands_clone = clone_islands(islands);
@@ -81,12 +86,12 @@ void	backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue deq
 	//print_solution(grid_clone, islands_clone);
 	//printf("\n");
 	//printf("\n");
-	if (!is_valid(grid_clone, islands_clone, cache_grid, &dequeue))
+	if (!is_valid((const unsigned long long ***)grid_clone, islands_clone, cache_grid, &dequeue))
 	{
 		free_clones(grid_clone, islands_clone);
 		return ;
 	}
-	if (is_solved(grid_clone))
+	if (is_solved(grid_clone, bitset_size))
 	{
 		print_solution(grid_clone, islands_clone);
 		//printf("solution found\n");
@@ -95,16 +100,21 @@ void	backtracking(int **grid, t_island *islands, int **cache_grid, t_dequeue deq
 		return ;
 	}
 	pos = get_optimal_pos_to_change(grid_clone, islands_clone);
-	i = 0;
-	cache_bitmap = grid_clone[pos.y][pos.x];
-	while (i < 32 && pos.x != -1)
+	copy_bitset(cache_bitmap, grid_clone[pos.y][pos.x], bitset_size);
+	j = 0;
+	while (j < bitset_size && pos.x != -1)
 	{
-		if (cache_bitmap & (1 << i))
+		i = 0;
+		while (i < 64)
 		{
-			grid_clone[pos.y][pos.x] = 1 << i;
-			backtracking(grid_clone, islands_clone, cache_grid, dequeue);
+			if (cache_bitmap[j] & (1ULL << i))
+			{
+				grid_clone[pos.y][pos.x][j] = 1ULL << i;
+				backtracking(grid_clone, islands_clone, cache_grid, dequeue);
+			}
+			i++;
 		}
-		i++;
+		j++;
 	}
 	free_clones(grid_clone, islands_clone);
 }

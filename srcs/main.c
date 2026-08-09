@@ -6,9 +6,10 @@ int	main(int argc, char **argv)
 	char		*file_content;
 	char		**lines;
 	t_island	*islands;
-	int			**grid;
-	int			**cache_grid;
+	unsigned long long			***grid;
+	unsigned long long			***cache_grid;
 	int			i;
+	int			bitset_size;
 	t_dequeue	dequeue;
 
 	file_name = "maps/map3";
@@ -31,14 +32,17 @@ int	main(int argc, char **argv)
 
 	islands = get_islands(lines);
 
-	grid = get_empty_grid(i);
-	cache_grid = get_empty_grid(i);
+	bitset_size = get_bitset_size_from_islands(islands);
+	grid = get_empty_grid(i, bitset_size);
+	cache_grid = get_empty_grid(i, bitset_size);
 	initialise_grid(grid, islands);
 
 	backtracking(grid, islands, cache_grid, dequeue);
 	//deduction_solve(grid, islands, cache_grid, &dequeue);
+	//deduction_solve(grid, islands, cache_grid, &dequeue);
+	//deduction_solve(grid, islands, cache_grid, &dequeue);
 	//print_islands(islands);
-	//print_grid(grid);
+	//print_grid(grid, islands);
 	//printf("\n");
 
 	//print_solution(grid, islands);

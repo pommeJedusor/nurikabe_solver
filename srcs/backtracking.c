@@ -59,7 +59,8 @@ void	free_clones(unsigned long long ***grid, t_island *islands)
 	free(islands);
 }
 
-void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue dequeue)
+//returns 1 if found a solution
+int	backtracking(unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue dequeue)
 {
 	unsigned long long	***grid_clone;
 	unsigned long long	cache_bitmap[MAX_BITSET_SIZE];
@@ -72,12 +73,12 @@ void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long l
 	bitset_size = get_bitset_size_from_islands(islands);
 	grid_clone = clone_grid(grid, bitset_size);
 	if (grid_clone == 0)
-		return ;
+		return (0);
 	islands_clone = clone_islands(islands);
 	if (islands_clone == 0)
 	{
 		free_clones(grid_clone, islands_clone);
-		return ;
+		return (0);
 	}
 	//printf("test\n");
 	//print_solution(grid_clone, islands_clone);
@@ -90,7 +91,7 @@ void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long l
 		//printf("\n");
 		//printf("\n");
 		free_clones(grid_clone, islands_clone);
-		return ;
+		return (0);
 	}
 	//printf("\n");
 	//printf("\n");
@@ -100,7 +101,7 @@ void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long l
 		//printf("solution found\n");
 		//printf("\n");
 		free_clones(grid_clone, islands_clone);
-		return ;
+		return (1);
 	}
 	pos = get_optimal_pos_to_change(grid_clone, islands_clone);
 	copy_bitset(cache_bitmap, grid_clone[pos.y][pos.x], bitset_size);
@@ -114,11 +115,16 @@ void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long l
 			{
 				copy_bitset(grid_clone[pos.y][pos.x], EMPTY_BITSET, bitset_size);
 				grid_clone[pos.y][pos.x][j] = 1ULL << i;
-				backtracking(grid_clone, islands_clone, cache_grid, dequeue);
+				if (backtracking(grid_clone, islands_clone, cache_grid, dequeue))
+				{
+					free_clones(grid_clone, islands_clone);
+					return (1);
+				}
 			}
 			i++;
 		}
 		j++;
 	}
 	free_clones(grid_clone, islands_clone);
+	return (0);
 }

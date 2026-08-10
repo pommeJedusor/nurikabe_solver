@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 		return (1);
 	lines = split_lines(file_content);
 	free(file_content);
-	if (file_content == 0)
+	if (lines == 0)
 		return (1);
 	i = 0;
 	while (lines[i])

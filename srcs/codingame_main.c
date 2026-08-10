@@ -9,6 +9,7 @@ char	**get_lines_codingame(int nb_lines)
 	lines = malloc(sizeof(char *) * (nb_lines + 1));
 	if (lines == 0)
 		return (0);
+	i = 0;
 	while (i < nb_lines)
 	{
 		lines[i] = malloc(sizeof(char) * 33);
@@ -38,7 +39,6 @@ int	main()
 	t_island	*islands;
 	unsigned long long			***grid;
 	unsigned long long			***cache_grid;
-	int			i;
 	int			bitset_size;
 	t_dequeue	dequeue;
 

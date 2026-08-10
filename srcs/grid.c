@@ -45,6 +45,7 @@ unsigned long long	***get_empty_grid(int size, int bitset_size)
 	while (y < size)
 	{
 		grid[y] = malloc(sizeof(unsigned long long *) * (size + 1));
+		grid[y + 1] = 0;
 		if (grid[y] == 0)
 			return (free_grid(grid));
 		x = 0;
@@ -59,7 +60,6 @@ unsigned long long	***get_empty_grid(int size, int bitset_size)
 		grid[y][x] = 0;
 		y++;
 	}
-	grid[y] = 0;
 	return (grid);
 }
 

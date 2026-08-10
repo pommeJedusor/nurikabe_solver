@@ -96,7 +96,7 @@ void	use_bfs_to_limit_island(unsigned long long ***grid, t_island *island, unsig
 
 void	use_bfs_to_limit_islands(unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue *dequeue)
 {
-	int	i;
+	int		i;
 	int		bitset_size;
 
 	bitset_size = get_bitset_size_from_islands(islands);
@@ -115,6 +115,10 @@ void	use_bfs_to_limit_islands(unsigned long long ***grid, t_island *islands, uns
 		//printf("end test\n\n");
 		i++;
 	}
+	islands[0].pos = find_first_water_only((const unsigned long long ***)grid, bitset_size);
+	if (islands[0].pos.x != -1)
+		use_bfs_to_limit_island(grid, &islands[0], cache_grid, dequeue, bitset_size);
+	islands[0].pos.x = -1;
 }
 
 void	bfs(unsigned long long ***grid, t_island island, unsigned long long ***cache_grid, t_dequeue *dequeue, int bitset_size)
@@ -127,8 +131,10 @@ void	bfs(unsigned long long ***grid, t_island island, unsigned long long ***cach
 	initialise_dequeue(dequeue);
 	init_cache_grid(grid, cache_grid, bitset_size);
 	island.pos.cost = 0;
-	max_cost = island.target_size - island.current_size;
 	copy_bitset(island_bitmap, grid[island.pos.y][island.pos.x], bitset_size);
+	max_cost = island.target_size - island.current_size;
+	if (cmp_bitsets(island_bitmap, WATER, bitset_size) == 0)
+		max_cost = INT_MAX;
 	push_back(dequeue, island.pos);
 	while (!is_empty(dequeue))
 	{

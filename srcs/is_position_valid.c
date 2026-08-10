@@ -39,6 +39,27 @@ int	are_islands_in_place(const unsigned long long ***grid, t_island *islands)
 	return (1);
 }
 
+t_pos	find_first_water_only(const unsigned long long ***grid, int bitset_size)
+{
+	t_pos	pos;
+
+	pos.y = 0;
+	while (grid[pos.y])
+	{
+		pos.x = 0;
+		while (grid[pos.y][pos.x])
+		{
+			if (cmp_bitsets(grid[pos.y][pos.x], WATER, bitset_size) == 0)
+				return (pos);
+			pos.x += 1;
+		}
+		pos.y += 1;
+	}
+	pos.x = -1;
+	pos.y = -1;
+	return (pos);
+}
+
 t_pos	find_first_water(const unsigned long long ***grid)
 {
 	t_pos	pos;

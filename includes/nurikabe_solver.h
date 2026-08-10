@@ -89,5 +89,6 @@ int			count_water(unsigned long long ***grid, int bitset_size);
 void		backtracking(unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue dequeue);
 
 int			is_valid(const unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue *dequeue);
+t_pos		find_first_water_only(const unsigned long long ***grid, int bitset_size);
 
 #endif

@@ -39,7 +39,20 @@ int	main(int argc, char **argv)
 
 	bitset_size = get_bitset_size_from_islands(islands);
 	grid = get_empty_grid(i, bitset_size);
+	if (grid == 0)
+	{
+		free_lines(lines);
+		free(islands);
+		return (1);
+	}
 	cache_grid = get_empty_grid(i, bitset_size);
+	if (cache_grid == 0)
+	{
+		free_lines(lines);
+		free(islands);
+		free_grid(grid);
+		return (1);
+	}
 	initialise_grid(grid, islands);
 
 	backtracking(grid, islands, cache_grid, dequeue);

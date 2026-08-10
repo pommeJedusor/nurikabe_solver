@@ -126,7 +126,9 @@ int	isolated_island_part_and_max_size(const unsigned long long ***grid, t_island
 		pos.x = 0;
 		while (grid[pos.y][pos.x])
 		{
-			if (cmp_bitsets(cache_grid[pos.y][pos.x], grid[pos.y][pos.x], bitset_size) != 0)
+			copy_bitset(island_bitmap, cache_grid[pos.y][pos.x], bitset_size);
+			bitset_and(island_bitmap, grid[pos.y][pos.x], bitset_size);
+			if (cmp_bitsets(island_bitmap, cache_grid[pos.y][pos.x], bitset_size) != 0)
 				return (1);
 			pos.x += 1;
 		}
@@ -157,6 +159,36 @@ int	is_water_square(const unsigned long long ***grid, int bitset_size)
 	return (0);
 }
 
+int	are_islands_touching(const unsigned long long ***grid, int bitset_size)
+{
+	t_pos	pos;
+	pos.y = 0;
+	while (grid[pos.y])
+	{
+		pos.x = 0;
+		while (grid[pos.y][pos.x])
+		{
+			if (count_bitset_bits(grid[pos.y][pos.x], bitset_size) == 1
+					&& cmp_bitsets(grid[pos.y][pos.x], WATER, bitset_size) != 0)
+			{
+				if (grid[pos.y + 1]
+						&& count_bitset_bits(grid[pos.y + 1][pos.x], bitset_size) == 1
+						&& cmp_bitsets(grid[pos.y][pos.x], grid[pos.y + 1][pos.x], bitset_size) != 0
+						&& cmp_bitsets(grid[pos.y + 1][pos.x], WATER, bitset_size) != 0)
+					return (1);
+				if (grid[pos.y][pos.x + 1]
+						&& count_bitset_bits(grid[pos.y][pos.x + 1], bitset_size) == 1
+						&& cmp_bitsets(grid[pos.y][pos.x], grid[pos.y][pos.x + 1], bitset_size) != 0
+						&& cmp_bitsets(grid[pos.y][pos.x + 1], WATER, bitset_size) != 0)
+					return (1);
+			}
+			pos.x += 1;
+		}
+		pos.y += 1;
+	}
+	return (0);
+}
+
 int	is_valid(const unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue *dequeue)
 {
 	int		bitset_size;
@@ -169,6 +201,8 @@ int	is_valid(const unsigned long long ***grid, t_island *islands, unsigned long 
 	if (isolated_island_part_and_max_size(grid, islands, cache_grid, dequeue))
 		return (0);
 	if (is_water_square(grid, bitset_size))
+		return (0);
+	if (are_islands_touching(grid, bitset_size))
 		return (0);
 	return (1);
 }

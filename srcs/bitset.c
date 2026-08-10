@@ -95,7 +95,7 @@ int	get_bitset_trailing_zeros(const unsigned long long *bitset, int bitset_size)
 		while (bitset[i] && (bitset[i] & (1ULL << j)) == 0)
 			j++;
 		if (bitset[i])
-			return (j);
+			return (i * 64 + j);
 		i++;
 	}
 	return (-1);

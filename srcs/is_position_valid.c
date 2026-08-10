@@ -32,7 +32,7 @@ int	are_islands_in_place(const unsigned long long ***grid, t_island *islands)
 	{
 		pos = islands[i].pos;
 		if (count_bitset_bits(grid[pos.y][pos.x], bitset_size) != 1
-				|| grid[pos.y][pos.x][islands[i].id / 64] != 1ULL << (islands[i].id % 64))
+				|| grid[pos.y][pos.x][islands[i].id / 64ULL] != 1ULL << (islands[i].id % 64ULL))
 			return (0);
 		i++;
 	}
@@ -97,7 +97,7 @@ int	isolated_island_part_and_max_size(const unsigned long long ***grid, t_island
 	{
 		max_potential_size = 0;
 		copy_bitset(island_bitmap, EMPTY_BITSET, bitset_size);
-		island_bitmap[i / 64] = 1ULL << (i % 64);
+		island_bitmap[i / 64ULL] = 1ULL << (i % 64ULL);
 		if (i == 0)
 			push_back(dequeue, find_first_water(grid));
 		else
@@ -106,8 +106,8 @@ int	isolated_island_part_and_max_size(const unsigned long long ***grid, t_island
 		{
 			pos = pop_front(dequeue);
 			if (pos.x < 0 || pos.y < 0 || grid[pos.y] == 0 || grid[pos.y][pos.x] == 0
-					|| (grid[pos.y][pos.x][i / 64] & (1ULL << (i % 64))) == 0
-					|| cache_grid[pos.y][pos.x][i / 64] & (1ULL << (i % 64)))
+					|| (grid[pos.y][pos.x][i / 64ULL] & (1ULL << (i % 64ULL))) == 0
+					|| cache_grid[pos.y][pos.x][i / 64ULL] & (1ULL << (i % 64ULL)))
 				continue ;
 			max_potential_size++;
 			bitset_or(cache_grid[pos.y][pos.x], island_bitmap, bitset_size);

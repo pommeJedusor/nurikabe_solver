@@ -8,8 +8,8 @@ void	get_full_bitmap_for_islands(int nb_islands, unsigned long long *bitmap)
 	while (i < nb_islands)
 	{
 		if (i % 64 == 0)
-			bitmap[i / 64] = 0;
-		bitmap[i / 64] |= 1ULL << (i % 64);
+			bitmap[i / 64ULL] = 0;
+		bitmap[i / 64ULL] |= 1ULL << (i % 64ULL);
 		i++;
 	}
 }
@@ -38,7 +38,8 @@ void	initialise_grid(unsigned long long ***grid, t_island *islands)
 	i = 1;
 	while (islands[i].id != -1)
 	{
-		grid[islands[i].pos.y][islands[i].pos.x][islands[i].id / 64] = 1ULL << (islands[i].id % 64);
+		copy_bitset(grid[islands[i].pos.y][islands[i].pos.x], EMPTY_BITSET, get_bitset_size_from_islands(islands));
+		grid[islands[i].pos.y][islands[i].pos.x][islands[i].id / 64] = 1ULL << (islands[i].id % 64ULL);
 		i++;
 	}
 }

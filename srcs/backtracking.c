@@ -112,6 +112,7 @@ void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long l
 		{
 			if (cache_bitmap[j] & (1ULL << i))
 			{
+				copy_bitset(grid_clone[pos.y][pos.x], EMPTY_BITSET, bitset_size);
 				grid_clone[pos.y][pos.x][j] = 1ULL << i;
 				backtracking(grid_clone, islands_clone, cache_grid, dequeue);
 			}

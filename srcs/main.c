@@ -61,6 +61,7 @@ int	main(int argc, char **argv)
 	//deduction_solve(grid, islands, cache_grid, &dequeue);
 	//print_islands(islands);
 	//print_grid(grid, islands);
+	//print_solution(grid, islands);
 	//printf("\n");
 
 	//print_solution(grid, islands);

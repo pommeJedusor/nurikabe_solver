@@ -76,8 +76,8 @@ void	use_bfs_to_limit_island(unsigned long long ***grid, t_island *island, unsig
 		while (grid[y][x])
 		{
 			if (cmp_bitsets(cache_grid[y][x], UNINITIALISED_BITSET, bitset_size) == 0
-					&& grid[y][x][island->id / 64] & (1ULL << (island->id % 64)))
-				grid[y][x][island->id / 64] ^= 1ULL << (island->id % 64);
+					&& grid[y][x][island->id / 64ULL] & (1ULL << (island->id % 64ULL)))
+				grid[y][x][island->id / 64ULL] ^= 1ULL << (island->id % 64ULL);
 			else
 				island_square_count++;
 			if (cmp_bitsets(grid[y][x], island_bitmap, bitset_size) == 0)
@@ -141,7 +141,7 @@ void	bfs(unsigned long long ***grid, t_island island, unsigned long long ***cach
 		cur_pos = pop_front(dequeue);
 		if (cur_pos.cost > max_cost
 				|| (cache_grid[cur_pos.y][cur_pos.x][0] <= (unsigned long long)cur_pos.cost && cache_grid[cur_pos.y][cur_pos.x][0] != ULLONG_MAX)
-				|| (grid[cur_pos.y][cur_pos.x][island.id / 64] & (1ULL << (island.id % 64))) == 0)
+				|| (grid[cur_pos.y][cur_pos.x][island.id / 64ULL] & (1ULL << (island.id % 64ULL))) == 0)
 			continue ;
 		cache_grid[cur_pos.y][cur_pos.x][0] = cur_pos.cost;
 		if (cur_pos.y > 0)

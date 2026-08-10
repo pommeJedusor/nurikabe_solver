@@ -31,6 +31,11 @@ int	main(int argc, char **argv)
 	//printf("\n");
 
 	islands = get_islands(lines);
+	if (islands == 0)
+	{
+		free_lines(lines);
+		return (1);
+	}
 
 	bitset_size = get_bitset_size_from_islands(islands);
 	grid = get_empty_grid(i, bitset_size);

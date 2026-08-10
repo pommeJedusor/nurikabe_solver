@@ -32,6 +32,7 @@ void	extend_island(unsigned long long ***grid, t_pos pos, unsigned long long ***
 	if (cmp_bitsets(cache_grid[pos.y][pos.x], UNINITIALISED_BITSET, bitset_size) != 0)
 		return ;
 	last_pos.x = -1;
+	last_pos.y = -1;
 	potential_extend_nb = 0;
 	initialise_dequeue(dequeue);
 	push_back(dequeue, pos);
@@ -50,7 +51,8 @@ void	extend_island(unsigned long long ***grid, t_pos pos, unsigned long long ***
 		if (cmp_bitsets(grid[cur_pos.y][cur_pos.x], grid[pos.y][pos.x], bitset_size) != 0)
 		{
 			copy_bitset(cache_grid[cur_pos.y][cur_pos.x], UNINITIALISED_BITSET, bitset_size);
-			potential_extend_nb++;
+			if (last_pos.x != cur_pos.x || last_pos.y != cur_pos.y)
+				potential_extend_nb++;
 			last_pos = cur_pos;
 			continue ;
 		}

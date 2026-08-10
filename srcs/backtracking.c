@@ -84,13 +84,16 @@ void	backtracking(unsigned long long ***grid, t_island *islands, unsigned long l
 	//printf("\n");
 	deduction_solve(grid_clone, islands_clone, cache_grid, &dequeue);
 	//print_solution(grid_clone, islands_clone);
-	//printf("\n");
-	//printf("\n");
 	if (!is_valid((const unsigned long long ***)grid_clone, islands_clone, cache_grid, &dequeue))
 	{
+		//printf("not valid\n");
+		//printf("\n");
+		//printf("\n");
 		free_clones(grid_clone, islands_clone);
 		return ;
 	}
+	//printf("\n");
+	//printf("\n");
 	if (is_solved(grid_clone, bitset_size))
 	{
 		print_solution(grid_clone, islands_clone);

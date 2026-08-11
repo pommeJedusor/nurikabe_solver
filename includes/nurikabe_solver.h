@@ -61,9 +61,6 @@ void		island_borders_rule(unsigned long long ***grid, t_island *islands);
 void		no_water_square_rule(unsigned long long ***grid, int bitset_size);
 void		deduction_solve(unsigned long long ***grid, t_island *islands, unsigned long long ***cache_grid, t_dequeue *dequeue);
 
-int			count_bits(int number);
-int			get_trailing_zeros(int number);
-
 void		copy_bitset(unsigned long long *dest, const unsigned long long *src, int size);
 int			count_bitset_bits(const unsigned long long *bitset, int bitset_size);
 int			get_bitset_size_from_islands(t_island *islands);

@@ -43,6 +43,8 @@ char		*get_file_content(char *file_name);
 char		**split_lines(char *str);
 char		**free_lines(char **strs);
 
+char		*get_stdin_content();
+
 t_island	*get_islands(char **lines);
 void		print_islands(t_island *islands);
 void		get_full_bitmap_for_islands(int nb_islands, unsigned long long *bitmap);

@@ -1,4 +1,4 @@
-CFILES = main.c get_file_content.c split.c grid.c island.c initialise_grid.c deduction_solve.c dequeue.c bfs.c extend_islands.c backtracking.c is_position_valid.c bitset.c
+CFILES = main.c get_file_content.c split.c grid.c island.c initialise_grid.c deduction_solve.c dequeue.c bfs.c extend_islands.c backtracking.c is_position_valid.c bitset.c get_stdin_content.c
 CPATHS = $(addprefix ./srcs/, $(CFILES))
 PROGRAM_NAME = ./nurikabe_solver
 HEADERS = ./includes

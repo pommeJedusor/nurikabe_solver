@@ -2,7 +2,6 @@
 
 int	main(int argc, char **argv)
 {
-	char		*file_name;
 	char		*file_content;
 	char		**lines;
 	t_island	*islands;
@@ -12,10 +11,10 @@ int	main(int argc, char **argv)
 	int			bitset_size;
 	t_dequeue	dequeue;
 
-	file_name = "maps/map3";
 	if (argc == 2)
-		file_name = argv[1];
-	file_content = get_file_content(file_name);
+		file_content = get_file_content(argv[1]);
+	else
+		file_content = get_stdin_content();
 	if (file_content == 0)
 		return (1);
 	lines = split_lines(file_content);

@@ -13,6 +13,11 @@ int	solves_from_file_content(char *file_content)
 
 	if (file_content == 0)
 		return (1);
+	if (is_input_valid(file_content) == 0)
+	{
+		free(file_content);
+		return (1);
+	}
 	lines = split_lines(file_content);
 	free(file_content);
 	if (lines == 0)
@@ -76,12 +81,16 @@ int	main(int argc, char **argv)
 				file_content = get_file_content(argv[i]);
 			backtracking_result = solves_from_file_content(file_content);
 			if (backtracking_result == 1)
-				printf("map invalid or failed to solve map\n");
+				fprintf(stderr, "map invalid or failed to solve map\n");
 			final_result |= backtracking_result;
 			i++;
 		}
 	}
 	else
+	{
 		final_result = solves_from_file_content(get_stdin_content());
+		if (final_result == 1)
+			fprintf(stderr, "map invalid or failed to solve map\n");
+	}
 	return (final_result);
 }

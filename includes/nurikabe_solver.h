@@ -45,6 +45,8 @@ char		**free_lines(char **strs);
 
 char		*get_stdin_content();
 
+int			is_input_valid(char *file_content);
+
 t_island	*get_islands(char **lines);
 void		print_islands(t_island *islands);
 void		get_full_bitmap_for_islands(int nb_islands, unsigned long long *bitmap);

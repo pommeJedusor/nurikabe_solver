@@ -1,8 +1,7 @@
 #include "nurikabe_solver.h"
 
-int	main(int argc, char **argv)
+int	solves_from_file_content(char *file_content)
 {
-	char		*file_content;
 	char		**lines;
 	t_island	*islands;
 	unsigned long long			***grid;
@@ -10,11 +9,8 @@ int	main(int argc, char **argv)
 	int			i;
 	int			bitset_size;
 	t_dequeue	dequeue;
+	int			backtracking_result;
 
-	if (argc == 2)
-		file_content = get_file_content(argv[1]);
-	else
-		file_content = get_stdin_content();
 	if (file_content == 0)
 		return (1);
 	lines = split_lines(file_content);
@@ -23,19 +19,13 @@ int	main(int argc, char **argv)
 		return (1);
 	i = 0;
 	while (lines[i])
-	{
-		//printf("%s\n", lines[i]);
 		i++;
-	}
-	//printf("\n");
-
 	islands = get_islands(lines);
 	if (islands == 0)
 	{
 		free_lines(lines);
 		return (1);
 	}
-
 	bitset_size = get_bitset_size_from_islands(islands);
 	grid = get_empty_grid(i, bitset_size);
 	if (grid == 0)
@@ -53,21 +43,45 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	initialise_grid(grid, islands);
-
-	backtracking(grid, islands, cache_grid, dequeue);
-	//deduction_solve(grid, islands, cache_grid, &dequeue);
-	//deduction_solve(grid, islands, cache_grid, &dequeue);
-	//deduction_solve(grid, islands, cache_grid, &dequeue);
-	//print_islands(islands);
-	//print_grid(grid, islands);
-	//print_solution(grid, islands);
-	//printf("\n");
-
-	//print_solution(grid, islands);
-	//printf("\n");
-
+	backtracking_result = backtracking(grid, islands, cache_grid, dequeue);
 	free_grid(grid);
 	free_grid(cache_grid);
 	free(islands);
 	free_lines(lines);
+	return (backtracking_result == 0);
+}
+
+int	main(int argc, char **argv)
+{
+	char		*file_content;
+	int			i;
+	int			backtracking_result;
+	int			final_result;
+
+	final_result = 0;
+	if (argc >= 2)
+	{
+		i = 1;
+		while (i < argc)
+		{
+			if (i != 1)
+				printf("\n");
+			if (argc != 2 && argv[i][0] == '-' && argv[i][1] == '\0')
+				printf("<-- standard input -->\n");
+			else if (argc != 2)
+				printf("<-- %s -->\n", argv[i]);
+			if (argv[i][0] == '-' && argv[i][1] == '\0')
+				file_content = get_stdin_content();
+			else
+				file_content = get_file_content(argv[i]);
+			backtracking_result = solves_from_file_content(file_content);
+			if (backtracking_result == 1)
+				printf("map invalid or failed to solve map\n");
+			final_result |= backtracking_result;
+			i++;
+		}
+	}
+	else
+		final_result = solves_from_file_content(get_stdin_content());
+	return (final_result);
 }

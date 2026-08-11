@@ -105,11 +105,11 @@ int	backtracking(unsigned long long ***grid, t_island *islands, unsigned long lo
 	}
 	pos = get_optimal_pos_to_change(grid_clone, islands_clone);
 	copy_bitset(cache_bitmap, grid_clone[pos.y][pos.x], bitset_size);
-	j = 0;
-	while (j < bitset_size && pos.x != -1)
+	j = bitset_size - 1;
+	while (j >= 0 && pos.x != -1)
 	{
-		i = 0;
-		while (i < 64)
+		i = 63;
+		while (i >= 0)
 		{
 			if (cache_bitmap[j] & (1ULL << i))
 			{
@@ -121,9 +121,9 @@ int	backtracking(unsigned long long ***grid, t_island *islands, unsigned long lo
 					return (1);
 				}
 			}
-			i++;
+			i--;
 		}
-		j++;
+		j--;
 	}
 	free_clones(grid_clone, islands_clone);
 	return (0);

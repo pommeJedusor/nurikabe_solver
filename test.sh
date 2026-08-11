@@ -17,7 +17,7 @@ error_check(){
     FILENAME=$(basename $FILE)
     echo "${FILENAME}"
     if [ "$CHECK_FOR_MEMORY_LEAKS" = true ] ; then
-	    valgrind -q --error-exitcode=1 --exit-on-first-error=yes --leak-check=yes ./nurikabe_solver maps/$FILENAME 1> $TMP_DIR/$FILENAME 2> $TMP_DIR/$(FILENAME)_err
+	    valgrind -q --error-exitcode=1 --exit-on-first-error=yes --leak-check=yes ./nurikabe_solver maps/$FILENAME 1> $TMP_DIR/$FILENAME 2> "$TMP_DIR/${FILENAME}_err"
     else
 	    ./nurikabe_solver maps/$FILENAME  1> $TMP_DIR/$FILENAME 2> "$TMP_DIR/${FILENAME}_err"
     fi
